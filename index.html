@@ -120,7 +120,6 @@
             position: relative;
         }
 
-        /* Halaman kanan spread 1 ada area klik tepi untuk ke halaman berikutnya */
         .page-turn-hint {
             position: absolute;
             right: 0;
@@ -304,7 +303,6 @@
             transition: width 0.08s ease;
         }
 
-        /* Spread 2 (Emotions & Pigeon) penuh tanpa celah */
         .emotion-page-bg {
             position: absolute;
             inset: 0;
@@ -327,7 +325,6 @@
             background-position: center;
         }
 
-        /* Drop zones over the 4 jars (INVISIBLE border) */
         .jar-zone {
             position: absolute;
             border: none;
@@ -359,7 +356,6 @@
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
         }
 
-        /* Chest center star container - dirapikan agar 5 bintang besar muat dengan rapi */
         .chest-star-area {
             position: absolute;
             bottom: 3.5%;
@@ -419,7 +415,7 @@
 <body>
 
     <audio id="bgMusic" loop autoplay preload="auto">
-        <source src="bake shop.mp4" type="audio/mp4">
+        <source src="birds.mp4" type="audio/mp4">
     </audio>
 
     <div class="card-cover" id="cardCover" onclick="openCard()">
@@ -429,7 +425,6 @@
     <div class="book-spread-wrapper" id="bookSpreadWrapper">
         <div class="book-spread" id="bookSpread">
             
-            <!-- SPREAD 1 -->
             <div class="spread-page-content active" id="spread1">
                 <div class="page left-page">
                     <div class="envelope-container" onclick="openLetter()">
@@ -447,7 +442,6 @@
                             <div class="smoke" id="smoke2" style="top: 45%; left: 65%;"></div>
                         </div>
 
-                        <!-- Klik pinggir kanan halaman 4 untuk ke spread berikutnya -->
                         <div class="page-turn-hint" onclick="goToSpread(2)" title="Lanjut ke halaman berikutnya">
                             &#9654;
                         </div>
@@ -468,16 +462,13 @@
                 </div>
             </div>
 
-            <!-- SPREAD 2 (Gambar 5 kiri, Gambar 7 kanan) -->
             <div class="spread-page-content" id="spread2">
                 <div class="page left-page" id="leftPageSpread2">
                     <div class="emotion-page-bg"></div>
-                    <!-- Jar drop zones (invisible borders) -->
                     <div class="jar-zone" id="jar-happy" data-jar="happy"></div>
                     <div class="jar-zone" id="jar-sad" data-jar="sad"></div>
                     <div class="jar-zone" id="jar-tiring" data-jar="tiring"></div>
                     <div class="jar-zone" id="jar-excited" data-jar="excited"></div>
-                    <!-- 5 buah bintang lebih besar di tengah peti -->
                     <div class="chest-star-area">
                         <img src="6.png" class="draggable-star" alt="Star 1">
                         <img src="6.png" class="draggable-star" alt="Star 2">
@@ -495,7 +486,6 @@
         </div>
     </div>
 
-    <!-- Drag ghost for visual tracking -->
     <img src="6.png" class="drag-ghost" id="dragGhost" alt="Ghost Star">
 
     <script>
@@ -527,7 +517,7 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             if (bgMusic) {
-                bgMusic.volume = 0.6;
+                bgMusic.volume = 0.4;
                 const playPromise = bgMusic.play();
                 if (playPromise !== undefined) {
                     playPromise.catch(() => {
