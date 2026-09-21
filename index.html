@@ -517,7 +517,7 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             if (bgMusic) {
-                bgMusic.volume = 0.4;
+                bgMusic.volume = 0.2;
                 const playPromise = bgMusic.play();
                 if (playPromise !== undefined) {
                     playPromise.catch(() => {
@@ -670,7 +670,6 @@
             micStatus.textContent = "Candles blown out!";
         }
 
-        /* --- DRAG & DROP FOR 5 STARS ON SPREAD 2 --- */
         const dragGhost = document.getElementById('dragGhost');
         const jarZones = document.querySelectorAll('.jar-zone');
 
