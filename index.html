@@ -61,8 +61,13 @@
             border-radius: 12px;
         }
 
-        .book-spread {
+        .book-spread-wrapper {
             display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .book-spread {
             width: 860px;
             max-width: 95vw;
             height: 540px;
@@ -70,6 +75,7 @@
             border-radius: 8px;
             box-shadow: var(--shadow);
             position: relative;
+            display: flex;
             flex-direction: row;
             overflow: hidden;
             animation: openBook 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
@@ -78,6 +84,17 @@
         @keyframes openBook {
             0% { transform: scale(0.8) rotateY(90deg); opacity: 0; }
             100% { transform: scale(1) rotateY(0deg); opacity: 1; }
+        }
+
+        .spread-page-content {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: row;
+        }
+
+        .spread-page-content.active {
+            display: flex;
         }
 
         .page {
@@ -100,6 +117,32 @@
 
         .right-page {
             background-color: transparent;
+            position: relative;
+        }
+
+        /* Halaman kanan spread 1 ada area klik tepi untuk ke halaman berikutnya */
+        .page-turn-hint {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 50px;
+            cursor: pointer;
+            z-index: 150;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 16px;
+            font-weight: bold;
+            background: linear-gradient(to right, transparent, rgba(0,0,0,0.15));
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .page-turn-hint:hover {
+            background: linear-gradient(to right, transparent, rgba(0,0,0,0.3));
+            color: #fff;
         }
 
         .envelope-container {
@@ -177,15 +220,8 @@
             100% { transform: scale(1.08) rotate(3deg); }
         }
 
-        .flame-1 {
-            top: 48%;
-            left: 30.5%;
-        }
-
-        .flame-2 {
-            top: 48%;
-            left: 64.5%;
-        }
+        .flame-1 { top: 48%; left: 30.5%; }
+        .flame-2 { top: 48%; left: 64.5%; }
 
         .flame.extinguished {
             opacity: 0;
@@ -218,7 +254,7 @@
             position: absolute;
             bottom: 12px;
             left: 12px;
-            right: 12px;
+            right: 60px;
             background: rgba(255, 249, 239, 0.95);
             padding: 8px 12px;
             border-radius: 8px;
@@ -250,9 +286,7 @@
             transition: background 0.2s;
         }
 
-        .mic-btn:hover, .fallback-btn:hover {
-            background: #a33232;
-        }
+        .mic-btn:hover, .fallback-btn:hover { background: #a33232; }
 
         .level-meter-wrapper {
             flex-grow: 1;
@@ -270,6 +304,101 @@
             transition: width 0.08s ease;
         }
 
+        /* Spread 2 (Emotions & Pigeon) penuh tanpa celah */
+        .emotion-page-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('5.png');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .pigeon-page-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('7.png');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        /* Drop zones over the 4 jars (INVISIBLE border) */
+        .jar-zone {
+            position: absolute;
+            border: none;
+            background: transparent;
+            border-radius: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px;
+            pointer-events: auto;
+            z-index: 55;
+        }
+
+        .jar-zone.highlight {
+            background: rgba(255, 215, 0, 0.12);
+        }
+
+        #jar-happy { top: 12%; left: 10%; width: 33%; height: 28%; }
+        #jar-sad { top: 12%; right: 10%; width: 33%; height: 28%; }
+        #jar-tiring { top: 44%; left: 10%; width: 33%; height: 26%; }
+        #jar-excited { top: 44%; right: 10%; width: 33%; height: 26%; }
+
+        .jar-star-item {
+            width: 32px;
+            height: 32px;
+            pointer-events: none;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+        }
+
+        /* Chest center star container - dirapikan agar 5 bintang besar muat dengan rapi */
+        .chest-star-area {
+            position: absolute;
+            bottom: 3.5%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 250px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            z-index: 60;
+        }
+
+        .draggable-star {
+            width: 42px;
+            height: 42px;
+            cursor: grab;
+            filter: drop-shadow(0 3px 5px rgba(0,0,0,0.5));
+            transition: transform 0.1s ease;
+            touch-action: none;
+            flex-shrink: 0;
+        }
+
+        .draggable-star:active {
+            cursor: grabbing;
+            transform: scale(1.15);
+        }
+
+        .drag-ghost {
+            position: fixed;
+            width: 42px;
+            height: 42px;
+            pointer-events: none;
+            z-index: 9999;
+            filter: drop-shadow(0 5px 8px rgba(0,0,0,0.6));
+            display: none;
+        }
+
         @media (max-width: 900px) {
             .book-spread {
                 flex-direction: column;
@@ -280,6 +409,9 @@
             .page {
                 width: 100%;
                 height: 480px;
+            }
+            .spread-page-content {
+                flex-direction: column;
             }
         }
     </style>
@@ -294,42 +426,84 @@
         <img src="1.png" alt="Birthday Cover Photo">
     </div>
 
-    <div class="book-spread" id="bookSpread">
-        <div class="page left-page">
-            <div class="envelope-container" onclick="openLetter()">
-                <div class="envelope-bg"></div>
-                <div class="popup-letter" id="popupLetter" onclick="closeLetter(event)"></div>
-            </div>
-        </div>
-
-        <div class="page right-page">
-            <div class="cake-container" id="cakeContainer">
-                <div class="cake-bg">
-                    <div class="flame flame-1" id="flame1"></div>
-                    <div class="flame flame-2" id="flame2"></div>
-                    <div class="smoke" id="smoke1" style="top: 45%; left: 31%;"></div>
-                    <div class="smoke" id="smoke2" style="top: 45%; left: 65%;"></div>
+    <div class="book-spread-wrapper" id="bookSpreadWrapper">
+        <div class="book-spread" id="bookSpread">
+            
+            <!-- SPREAD 1 -->
+            <div class="spread-page-content active" id="spread1">
+                <div class="page left-page">
+                    <div class="envelope-container" onclick="openLetter()">
+                        <div class="envelope-bg"></div>
+                        <div class="popup-letter" id="popupLetter" onclick="closeLetter(event)"></div>
+                    </div>
                 </div>
 
-                <div class="mic-panel">
-                    <div class="mic-controls-row">
-                        <button class="mic-btn" id="micBtn" onclick="initMic()">Enable Mic</button>
-                        <div class="level-meter-wrapper">
-                            <div class="level-meter-fill" id="meterFill"></div>
+                <div class="page right-page">
+                    <div class="cake-container" id="cakeContainer">
+                        <div class="cake-bg">
+                            <div class="flame flame-1" id="flame1"></div>
+                            <div class="flame flame-2" id="flame2"></div>
+                            <div class="smoke" id="smoke1" style="top: 45%; left: 31%;"></div>
+                            <div class="smoke" id="smoke2" style="top: 45%; left: 65%;"></div>
                         </div>
-                        <button class="fallback-btn" id="fallbackBtn" onmousedown="startBlowing()" onmouseup="stopBlowing()" ontouchstart="startBlowing()" ontouchend="stopBlowing()">Hold to Blow</button>
-                    </div>
-                    <div style="font-size: 8px; color: #666; text-align: center;" id="micStatus">
-                        Blow into mic or hold button / press Spacebar
+
+                        <!-- Klik pinggir kanan halaman 4 untuk ke spread berikutnya -->
+                        <div class="page-turn-hint" onclick="goToSpread(2)" title="Lanjut ke halaman berikutnya">
+                            &#9654;
+                        </div>
+
+                        <div class="mic-panel">
+                            <div class="mic-controls-row">
+                                <button class="mic-btn" id="micBtn" onclick="initMic()">Enable Mic</button>
+                                <div class="level-meter-wrapper">
+                                    <div class="level-meter-fill" id="meterFill"></div>
+                                </div>
+                                <button class="fallback-btn" id="fallbackBtn" onmousedown="startBlowing()" onmouseup="stopBlowing()" ontouchstart="startBlowing()" ontouchend="stopBlowing()">Hold to Blow</button>
+                            </div>
+                            <div style="font-size: 8px; color: #666; text-align: center;" id="micStatus">
+                                Blow into mic or hold button / press Spacebar
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <!-- SPREAD 2 (Gambar 5 kiri, Gambar 7 kanan) -->
+            <div class="spread-page-content" id="spread2">
+                <div class="page left-page" id="leftPageSpread2">
+                    <div class="emotion-page-bg"></div>
+                    <!-- Jar drop zones (invisible borders) -->
+                    <div class="jar-zone" id="jar-happy" data-jar="happy"></div>
+                    <div class="jar-zone" id="jar-sad" data-jar="sad"></div>
+                    <div class="jar-zone" id="jar-tiring" data-jar="tiring"></div>
+                    <div class="jar-zone" id="jar-excited" data-jar="excited"></div>
+                    <!-- 5 buah bintang lebih besar di tengah peti -->
+                    <div class="chest-star-area">
+                        <img src="6.png" class="draggable-star" alt="Star 1">
+                        <img src="6.png" class="draggable-star" alt="Star 2">
+                        <img src="6.png" class="draggable-star" alt="Star 3">
+                        <img src="6.png" class="draggable-star" alt="Star 4">
+                        <img src="6.png" class="draggable-star" alt="Star 5">
+                    </div>
+                </div>
+
+                <div class="page right-page">
+                    <div class="pigeon-page-bg"></div>
+                </div>
+            </div>
+
         </div>
     </div>
 
+    <!-- Drag ghost for visual tracking -->
+    <img src="6.png" class="drag-ghost" id="dragGhost" alt="Ghost Star">
+
     <script>
         const cardCover = document.getElementById('cardCover');
-        const bookSpread = document.getElementById('bookSpread');
+        const bookSpreadWrapper = document.getElementById('bookSpreadWrapper');
+        const spread1 = document.getElementById('spread1');
+        const spread2 = document.getElementById('spread2');
+
         const popupLetter = document.getElementById('popupLetter');
         const flame1 = document.getElementById('flame1');
         const flame2 = document.getElementById('flame2');
@@ -376,9 +550,19 @@
             if (isOpened) return;
             isOpened = true;
             cardCover.style.display = 'none';
-            bookSpread.style.display = 'flex';
+            bookSpreadWrapper.style.display = 'flex';
             if (bgMusic && bgMusic.paused) {
                 bgMusic.play().catch(() => {});
+            }
+        }
+
+        function goToSpread(targetNum) {
+            if (targetNum === 1) {
+                spread1.classList.add('active');
+                spread2.classList.remove('active');
+            } else {
+                spread1.classList.remove('active');
+                spread2.classList.add('active');
             }
         }
 
@@ -495,6 +679,92 @@
             meterFill.style.width = '0%';
             micStatus.textContent = "Candles blown out!";
         }
+
+        /* --- DRAG & DROP FOR 5 STARS ON SPREAD 2 --- */
+        const dragGhost = document.getElementById('dragGhost');
+        const jarZones = document.querySelectorAll('.jar-zone');
+
+        let isDraggingStar = false;
+        let activeStarElement = null;
+
+        function startDragStar(clientX, clientY, sourceEl) {
+            isDraggingStar = true;
+            activeStarElement = sourceEl;
+            dragGhost.style.display = 'block';
+            updateGhostPos(clientX, clientY);
+        }
+
+        function updateGhostPos(clientX, clientY) {
+            dragGhost.style.left = (clientX - 21) + 'px';
+            dragGhost.style.top = (clientY - 21) + 'px';
+            
+            jarZones.forEach(zone => {
+                const rect = zone.getBoundingClientRect();
+                if (clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom) {
+                    zone.classList.add('highlight');
+                } else {
+                    zone.classList.remove('highlight');
+                }
+            });
+        }
+
+        function endDragStar(clientX, clientY) {
+            if (!isDraggingStar) return;
+            isDraggingStar = false;
+            dragGhost.style.display = 'none';
+
+            let dropped = false;
+            jarZones.forEach(zone => {
+                zone.classList.remove('highlight');
+                const rect = zone.getBoundingClientRect();
+                if (clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom) {
+                    const starItem = document.createElement('img');
+                    starItem.src = '6.png';
+                    starItem.className = 'jar-star-item';
+                    zone.appendChild(starItem);
+                    dropped = true;
+                }
+            });
+
+            if (dropped && activeStarElement) {
+                activeStarElement.style.visibility = 'hidden';
+            }
+            activeStarElement = null;
+        }
+
+        document.querySelectorAll('.draggable-star').forEach(star => {
+            star.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                startDragStar(e.clientX, e.clientY, star);
+            });
+            star.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                startDragStar(touch.clientX, touch.clientY, star);
+            }, {passive: false});
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (isDraggingStar) updateGhostPos(e.clientX, e.clientY);
+        });
+
+        window.addEventListener('mouseup', (e) => {
+            if (isDraggingStar) endDragStar(e.clientX, e.clientY);
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (isDraggingStar) {
+                const touch = e.touches[0];
+                updateGhostPos(touch.clientX, touch.clientY);
+            }
+        }, {passive: true});
+
+        window.addEventListener('touchend', (e) => {
+            if (isDraggingStar) {
+                const touch = e.changedTouches[0];
+                endDragStar(touch.clientX, touch.clientY);
+            }
+        });
     </script>
 </body>
 </html>
